@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
+from utils.mysql_conn import db_conn
+import mysql.connector
 import pytz
 
 
@@ -369,7 +371,7 @@ def historical_six_months():
                 df['time'] = pd.to_datetime(df['time'], unit='s')
                 df['price_change'] = df['close'] - df['open'] 
                 df['average_price'] = (df['high'] + df['low']) / 2
-                df['volatitlity'] = (df['high'] - df['low']) / df['low'] * 100
+                df['volatility'] = (df['high'] - df['low']) / df['low'] * 100
                 df['product_id'] = product_id
 
                 # Append to the main DataFrame
@@ -389,7 +391,7 @@ def historical_six_months():
     return all_data
 
 
-def main():
+def combine_price_data():
     three_years = historical_three_years()
     two_half = historical_two_half_years()
     two_years = historical_two_years()
@@ -401,16 +403,47 @@ def main():
                              one_year, six_months], ignore_index=True)
     return combined_df
 
-main_df = main()
-main_to_csv = main_df.to_csv("RAW_Data/main_data.csv")
-grouped_df = main_df.groupby('product_id')['time'].nunique().reset_index()
-grouped_df.columns = ['product_id', 'unique_date_count']
-num_rows = len(main_df)
+def load_mysql_historic_table():
+    db = None
+    connection = None
+    try:
+        crypto_data = combine_price_data()
+        db = db_conn()
+        connection = db.mysql_conn()
+        if connection is None:
+            print('Failed to connect to the databse')
+            return
+        db.execute_query(connection, "USE CAPSTONE")
+        for _, row in crypto_data.iterrows():
+            insert_query =  f"""
+                            INSERT INTO HISTORIC_CRYPTO_PRICES (
+                time, low, high, open, close, volume, price_change, average_price, volatility, product_id, load_dt
+            ) VALUES (
+                '{row['time']}', {row['low']}, {row['high']}, {row['open']}, {row['close']},
+                {row['volume']}, {row['price_change']}, {row['average_price']},
+                {row['volatility']}, '{row['product_id']}', CURDATE()
+            )"""
 
-if num_rows > grouped_df['unique_date_count'].sum():
-    print('Duplicate Dates Found')
-else:
-    print('No duplicates Found')
+
+        db.execute_query(connection,insert_query, data=None)
+        print("Data inserted successfully into HISTORIC_CRYPTO_PRICES")
+    except mysql.connector.Error as err:
+            print(f"Error: {err}")
+    # finally:
+    #     db.close(connection)
+            
+load_mysql_historic_table()
+
+# main_df = main()
+# main_to_csv = main_df.to_csv("RAW_Data/main_data.csv")
+# grouped_df = main_df.groupby('product_id')['time'].nunique().reset_index()
+# grouped_df.columns = ['product_id', 'unique_date_count']
+# num_rows = len(main_df)
+
+# if num_rows > grouped_df['unique_date_count'].sum():
+#     print('Duplicate Dates Found')
+# else:
+#     print('No duplicates Found')
 
 
 # # Define the parameters
