@@ -9,8 +9,8 @@ _ = load_dotenv()
 class db_conn:
 
     def __init__(self):
-        self.host = os.getenv('HOST')
-        self.user = os.getenv('USER')
+        self.host = os.getenv('HOST_NAME')
+        self.user = os.getenv('USERNAME')
         self.password = os.getenv('PASSWORD')
 
     def mysql_conn(self):

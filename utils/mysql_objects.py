@@ -37,13 +37,6 @@ def create_historical_price_table():
     except mysql.connector.Error as e:
         print(f'An Error has occured {e}')
 
-# def insert_into_historic_prices():
-#     try:
-#         db = db_conn()
-#         connection = db.mysql_conn()
-#         db.execute_query(connection, "USE CAPSTONE")
-#         query = """
-
 create_historical_price_table()
 
         
