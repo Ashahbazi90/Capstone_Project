@@ -81,7 +81,7 @@ def historical_two_half_years():
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
     # start date is 2.5 years plus 1 day to avoid overlap
     two_half = today - relativedelta(months=30)
-    start =  two_half + timedelta(days=1)
+    start =  two_half #+ timedelta(days=1)
     # end date is a week ago
     end = today - relativedelta(months=24)
     granularity = 86400 
@@ -140,7 +140,7 @@ def historical_two_years():
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
     # start date is 2.5 years plus 1 day to avoid overlap
     two_years = today - relativedelta(months=24)
-    start =  two_years + timedelta(days=1)
+    start =  two_years #+ timedelta(days=1)
     # end date is a week ago
     end = today - relativedelta(months=18)
     granularity = 86400 
@@ -199,7 +199,7 @@ def historical_one_half_years():
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
     # start date is 2.5 years plus 1 day to avoid overlap
     one_half = today - relativedelta(months=18)
-    start =  one_half + timedelta(days=1)
+    start =  one_half #+ timedelta(days=1)
     # end date is a week ago
     end = today - relativedelta(months=12)
     granularity = 86400 
@@ -258,7 +258,7 @@ def historical_one_years():
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
     # start date is 2.5 years plus 1 day to avoid overlap
     one_year = today - relativedelta(months=12)
-    start =  one_year + timedelta(days=1)
+    start =  one_year #+ timedelta(days=1)
     # end date is a week ago
     end = today - relativedelta(months=6)
     granularity = 86400 
@@ -315,7 +315,7 @@ def historical_six_months():
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
     # start date is 2.5 years plus 1 day to avoid overlap
     one_year = today - relativedelta(months=6)
-    start =  one_year + timedelta(days=1)
+    start =  one_year #+ timedelta(days=1)
     # end date is a week ago
     end = today - relativedelta(days = 7)
     granularity = 86400 
@@ -362,6 +362,44 @@ def historical_six_months():
 
     return all_data
 
+def fetch_missing_data(product_id, start, end, granularity=86400):
+    url = f'https://api.pro.coinbase.com/products/{product_id}/candles'
+    params = {
+        'start': start.isoformat(),
+        'end': end.isoformat(),
+        'granularity': granularity
+    }
+    
+    response = requests.get(url, params=params)
+    time.sleep(1)  # Be cautious with API rate limits
+    if response.status_code == 200:
+        data = response.json()
+        df = pd.DataFrame(data, columns=['time', 'low', 'high', 'open', 'close', 'volume'])
+        df['time'] = pd.to_datetime(df['time'], unit='s')
+        df['price_change'] = df['close'] - df['open']
+        df['average_price'] = (df['high'] + df['low']) / 2
+        df['volatility'] = (df['high'] - df['low']) / df['low'] * 100
+        df['product_id'] = product_id
+        return df
+    else:
+        print(f"Error: Received status code {response.status_code} for {product_id}")
+        return pd.DataFrame()
+
+def check_missing_dates(df, start_date, end_date):
+    full_range = pd.date_range(start=start_date, end=end_date, freq='D')
+    missing_dates = full_range.difference(df['time'])
+    return missing_dates
+
+def fetch_missing_dates(product_id, dates):
+    all_data = pd.DataFrame()
+    for date in dates:
+        start = pd.to_datetime(date)
+        end = start + timedelta(days=1)
+        df = fetch_missing_data(product_id, start, end)
+        all_data = pd.concat([all_data, df], ignore_index=True)
+    return all_data
+
+
 
 def combine_price_data():
     pst = pytz.timezone('US/Pacific')
@@ -375,7 +413,20 @@ def combine_price_data():
     combined_df = pd.concat([three_years, two_half, 
                              two_years, one_half, 
                              one_year, six_months], ignore_index=True)
+    combined_df = pd.concat([three_years, two_half, two_years, one_half, one_year, six_months], ignore_index=True)
     combined_df['load_dt'] = load_dt
+    combined_df = combined_df.sort_values(by='time').reset_index(drop=True)
+    
+    # Check for missing dates
+    start_date = (datetime.now(pst) - relativedelta(months=36)).date()
+    end_date = (datetime.now(pst) - relativedelta(days=7)).date()
+    missing_dates = check_missing_dates(combined_df, start_date, end_date)
+    if not missing_dates.empty:
+        print(f"Missing dates: {missing_dates}")
+        for product_id in ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD']:
+            missing_data = fetch_missing_dates(product_id, missing_dates)
+            combined_df = pd.concat([combined_df, missing_data], ignore_index=True)
+    
     return combined_df
 
 def load_mysql_historic_table():

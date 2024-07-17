@@ -16,6 +16,10 @@ pytz = "^2024.1"
 python-dotenv = "^1.0.1"
 mysql-connector-python = "^9.0.0"
 sqlalchemy = "^2.0.31"
+notebook = "^7.2.1"
+ipykernel = "^6.29.5"
+matplotlib = "^3.9.1"
+seaborn = "^0.13.2"
 
 
 [build-system]
