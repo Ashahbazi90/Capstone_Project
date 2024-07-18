@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
-from utils.mysql_conn import db_conn
+from historic_api_pulls.utils.mysql_conn import db_conn
 import mysql.connector
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
@@ -362,6 +362,65 @@ def historical_six_months():
 
     return all_data
 
+def previous_week():
+    ## Set timezone so the data is consistent
+    pst = pytz.timezone('US/Pacific')
+    # Get today's date
+    today = datetime.now(pst)
+
+    ## set variable parameters for start, end and granulairty
+    product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
+    # start date is 2.5 years plus 1 day to avoid overlap
+    one_week = today - relativedelta(days=7)
+    start =  one_week #+ timedelta(days=1)
+    # end date is a week ago
+    end = today
+    granularity = 86400 
+
+    # set new master df where all teh data will be stored
+    all_data = pd.DataFrame()
+
+    # loop over the product id list to extract 3months worth of data for teh above coins in one dataframe
+        ## set URL to perform get request
+    for product_id in product_ids:
+        url = f'https://api.pro.coinbase.com/products/{product_id}/candles'
+        params = {
+            'start': start.isoformat(),
+            'end': end.isoformat(),
+            'granularity': granularity
+        }
+
+        response = requests.get(url, params=params)
+        time.sleep(15)
+        try:
+            if response.status_code == 200:
+                data = response.json()
+                # Convert the data to a pandas DataFrame for better readability
+                df = pd.DataFrame(data, columns=['time', 'low', 'high', 'open', 'close', 'volume'])
+                df['time'] = pd.to_datetime(df['time'], unit='s')
+                df['price_change'] = df['close'] - df['open'] 
+                df['average_price'] = (df['high'] + df['low']) / 2
+                df['volatility'] = (df['high'] - df['low']) / df['low'] * 100
+                df['product_id'] = product_id
+
+                # Append to the main DataFrame
+                all_data = pd.concat([all_data, df], ignore_index=True)
+
+            else:
+                print(f"Error: Received status code {response.status_code} for {product_id}")
+        except requests.exceptions.RequestException as e:
+            print(f"Request error: {e}")
+        except ValueError as e:
+            print(f"Value error: {e}")
+        except KeyError as e:
+            print(f"Key error: Missing key {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+    return all_data
+
+
+
 def fetch_missing_data(product_id, start, end, granularity=86400):
     url = f'https://api.pro.coinbase.com/products/{product_id}/candles'
     params = {
@@ -448,8 +507,8 @@ def load_mysql_historic_table():
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
             
-load_mysql_historic_table()
-
+# load_mysql_historic_table()
+print("Imports are working fine")
 
 ############### JUSTIN TO-DO ############################################
 
