@@ -1,32 +1,11 @@
-# .env file
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore all .env files
 .env
 
-# Virtual environment directories
-venv/
-.env/
-.venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
-# macOS specific files
-.DS_Store
-
-# Python specific files
-*.pyc
-__pycache__/
-*.pyo
-*.pyd
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
-
-# VS Code settings
-.vscode/
-
-# PyCharm settings
-.idea/
-
-# Log files
-*.log
+# Ignore build directory
+/build
