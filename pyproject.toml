@@ -21,6 +21,8 @@ ipykernel = "^6.29.5"
 matplotlib = "^3.9.1"
 seaborn = "^0.13.2"
 plotly = "^5.22.0"
+statsmodels = "^0.14.2"
+ipywidgets = "^8.1.3"
 
 
 [build-system]
