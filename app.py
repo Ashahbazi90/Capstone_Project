@@ -13,9 +13,29 @@ def home_page():
     st.title("Home Page")
     st.write("Welcome to the Guardians of the Crypto App!")
 
-def about_page():
-    st.title("About Page")
-    st.write("This is a comprehensive cryptocurrency analysis dashboard built with Streamlit and Plotly.")
+def about_metrics():
+    st.title("Explaning Trading Metrics")
+    select_metric = st.selectbox('Select Metrc',['Percentage Change', 'Volume', 'RSI', 'MACD', 'Momentum', 'Volatility'])
+    if select_metric == 'Percentage Change':
+        st.markdown("## Percentage Change")
+        st.markdown('### What it is')
+        st.write('This metrics shows how much the price has changed over a given period.')
+        st.markdown('### How to interpret it')
+        st.write('If the percentage is postive it means the pprice went up, if its negative it means it went down.')
+    if select_metric == 'Volume':
+        st.markdown("## Volume")
+        st.markdown('### What it is')
+        st.write('Inicates the number of units cryptocurreinces have been traded over a certain period')
+        st.markdown('### How to interpret it')
+        st.write('''If volume is high this means aot of trading activity whhich can mean there is a strong interst in that specfic token/coin.
+                Low volume means the opposite, so less trading activity. You could see a high volume data when teh price increases and this could mean a strong buying interest''')
+    if select_metric == 'RSI':
+        st.markdown("## RSI (Relative Strength Index)")
+        st.markdown('### What it is')
+        st.write('Moomentum Indicator that measures the speed and change of price movements')
+        st.markdown('### How to interpret it')
+        st.write('''The RSI values range between 0 and 100, an RSI abve 70 suggests that the cyptocurrency might be overbought (the pirce may decrease soon).
+                 If the RSI is below 30 this suggests it might be oversold and the price may increase soon. So if the RSI is 25 this could indicate that the crypto has been sold alot and could be due to a price increase''')
 
 def comprehensive_crypto_analysis():
     st.title("Comprehensive Cryptocurrency Analysis Dashboard")
@@ -47,6 +67,7 @@ def comprehensive_crypto_analysis():
     # Percentage Change plot
     fig.add_trace(go.Scatter(x=filtered_data.index, y=filtered_data['pct_change'], name='Percentage Change'), row=1, col=1)
 
+
     # Volume plot
     fig.add_trace(go.Bar(x=filtered_data.index, y=filtered_data['volume'], name='Volume'), row=1, col=2)
 
@@ -72,12 +93,12 @@ def comprehensive_crypto_analysis():
 
 # Sidebar navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "Crypto Analysis", "About"])
+page = st.sidebar.radio("Go to", ["Home", "About Metrics", "Crypto Analysis"])
 
 # Page navigation logic
 if page == "Home":
     home_page()
+elif page == "About Metrics":
+    about_metrics()
 elif page == "Crypto Analysis":
     comprehensive_crypto_analysis()
-elif page == "About":
-    about_page()
