@@ -4,7 +4,7 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
 # Assume df is your DataFrame loaded with the necessary data
-df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_data.csv')
+df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_data_2.csv')
 df.set_index('time', inplace=True)
 df.index = pd.to_datetime(df.index)
 
