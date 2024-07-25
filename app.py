@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+from mirnas_files.dashboard_script import generate_histogram_plot
 
 # Assume df is your DataFrame loaded with the necessary data
-df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_data_2.csv')
+df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_updated_722.csv')
 df.set_index('time', inplace=True)
 df.index = pd.to_datetime(df.index)
 
@@ -91,6 +92,9 @@ def comprehensive_crypto_analysis():
     # Display the plot
     st.plotly_chart(fig)
 
+# def test():
+#     generate_histogram_plot(df)
+
 # Sidebar navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "About Metrics", "Crypto Analysis"])
@@ -102,3 +106,5 @@ elif page == "About Metrics":
     about_metrics()
 elif page == "Crypto Analysis":
     comprehensive_crypto_analysis()
+# elif page == "Test":
+#     comprehensive_crypto_analysis()
