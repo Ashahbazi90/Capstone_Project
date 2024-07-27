@@ -85,5 +85,3 @@ elif page == '30 Day Volatility':
 elif page == 'Average Daily Percentage Change by Day of the Week':
     generate_avg_pct_change_by_day_plot()
 
-# elif page == "Test":
-#     comprehensive_crypto_analysis()
