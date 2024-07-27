@@ -6,9 +6,9 @@ from app_plots.streamlit_plts import generate_rolling_vol, generate_avg_pct_chan
 
 
 # Assume df is your DataFrame loaded with the necessary data
-df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_updated_722.csv')
-df.set_index('time', inplace=True)
-df.index = pd.to_datetime(df.index)
+# df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_updated_722.csv')
+# df.set_index('time', inplace=True)
+# df.index = pd.to_datetime(df.index)
 
 st.set_page_config(layout="wide")
 
@@ -39,6 +39,25 @@ def about_metrics():
         st.markdown('### How to interpret it')
         st.write('''The RSI values range between 0 and 100, an RSI abve 70 suggests that the cyptocurrency might be overbought (the pirce may decrease soon).
                  If the RSI is below 30 this suggests it might be oversold and the price may increase soon. So if the RSI is 25 this could indicate that the crypto has been sold alot and could be due to a price increase''')
+    if select_metric == 'MACD':
+        st.markdown("## MACD (Moving Average Convergence Divergence)")
+        st.markdown('### What it is')
+        st.write('A Moving Average indicator that identifies buy and sell signals.')
+        st.markdown('### How to interpret it')
+        st.write('''The MACD idenitifies buy and sell signals by comparing the short term and long termm trends of the coin. It uses the difference between the 12 and 26 period EMAs (Exponential Moving Average),
+                 with a 9 period EMA signal line.''')
+    if select_metric == 'Momentum':
+        st.markdown("## Momentum")
+        st.markdown('### What it is')
+        st.write('The speed of prices changes in a given coin.')
+        st.markdown('### How to interpret it')
+        st.write('''Momentum shows the rate of change in the price movement over a perod of time to help investors/traders determin the strength of a coin. This indicator can help show when the prices are rising (bullish momentum) or when prices fall (bearish momentum)''')
+    if select_metric == 'Volatility':
+        st.markdown("## Volatility")
+        st.markdown('### What it is')
+        st.write('This metric represents how much of a price swing there is around the average price.')
+        st.markdown('### How to interpret it')
+        st.write('''This 30-day volatility chart shows periods with larger spikes indicating higher volatility, while flatter lines indicate lower volatility. Observing how volatility changes year by year can help identify trends of increasing or decreasing volatility.''')
 
 
 def crypto_analysis():
