@@ -4447,6 +4447,28 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx"]
 test = ["argcomplete (>=3.0.3)", "mypy (>=1.7.0)", "pre-commit", "pytest (>=7.0,<8.2)", "pytest-mock", "pytest-mypy-testing"]
 
 [[package]]
+name = "tslearn"
+version = "0.6.3"
+description = "A machine learning toolkit dedicated to time-series data"
+optional = false
+python-versions = "*"
+files = [
+    {file = "tslearn-0.6.3-py3-none-any.whl", hash = "sha256:18c3b1984b4be2af0e7579c0b914633f2220bba2b6610c11861c4563272e9169"},
+    {file = "tslearn-0.6.3.tar.gz", hash = "sha256:c855c0b784b42dc4c50f4eaf524ec7ed658037e86fc14af38ca3b66c75dd6adb"},
+]
+
+[package.dependencies]
+joblib = "*"
+numba = "*"
+numpy = "*"
+scikit-learn = "*"
+scipy = "*"
+
+[package.extras]
+pytorch = ["torch"]
+tests = ["pytest", "torch"]
+
+[[package]]
 name = "types-python-dateutil"
 version = "2.9.0.20240316"
 description = "Typing stubs for python-dateutil"
@@ -4776,4 +4798,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "7598b7a1d9f9218c044fda202432fd779e4d192f1d29464bc9c9e00500582f28"
+content-hash = "51188618940bbf281eb393f2bd7d655a953e136d40bf6a2eb3279d3e618b3bd2"
