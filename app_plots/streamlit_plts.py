@@ -22,10 +22,15 @@ pd.options.display.max_columns = None
 
 
 ### read in the file that will be used for the plots
-file_path = '/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_updated_722.csv'
+file_path = 'Cleaned_Data/cleaned_crypto_updated_722.csv'
 df = pd.read_csv(file_path)
 df['time'] = pd.to_datetime(df['time'])
 df.set_index('time', inplace = True)
+
+### load in forecasted and actual values
+forecasted_file_path = 'Cleaned_Data/forecast_vs_actual.csv'
+forecasted_df = pd.read_csv(forecasted_file_path)
+
 
 def comprehensive_crypto_analysis():
     st.title("Comprehensive Cryptocurrency Analysis Dashboard")
@@ -251,3 +256,67 @@ def generate_avg_pct_change_by_day_plot():
 
 
 
+# def plot_forecasted_data():
+#     product_id = st.selectbox('Product ID:', forecasted_df['product_id'].unique())
+#     df = forecasted_df[forecasted_df['product_id'] == product_id]
+#     fig, ax = plt.subplots(figsize=(14, 7))
+#     ax.plot(df['Date'], df['Forecasted pct_change'], label='Forecasted pct_change', color='red', marker='o')
+#     ax.plot(df['Date'], df['Actual pct_change'], label='Actual pct_change', color='blue', marker='o')
+#     ax.set_title(f'{product_id} - Forecasted vs Actual pct_change')
+#     ax.set_xlabel('Date')
+#     ax.set_ylabel('Percentage Change')
+#     ax.legend()
+#     ax.grid(True)
+#     st.plotly_chart(fig)
+
+def plot_forecasted_data():
+    # Select product ID using Streamlit
+    product_id = st.selectbox('Product ID:', forecasted_df['product_id'].unique())
+
+    # Filter DataFrame based on selected product ID
+    df = forecasted_df[forecasted_df['product_id'] == product_id]
+
+    # Create a Plotly figure
+    fig = go.Figure()
+
+    # Add forecasted percentage change line
+    fig.add_trace(go.Scatter(
+        x=df['Date'], 
+        y=df['Forecasted pct_change'],
+        mode='lines+markers',
+        name='Forecasted pct_change',
+        line=dict(color='red'),
+        marker=dict(symbol='circle')
+    ))
+
+    # Add actual percentage change line
+    fig.add_trace(go.Scatter(
+        x=df['Date'], 
+        y=df['Actual pct_change'],
+        mode='lines+markers',
+        name='Actual pct_change',
+        line=dict(color='blue'),
+        marker=dict(symbol='circle')
+    ))
+
+    # Update layout with customized parameters
+    fig.update_layout(
+        height=800,
+        width=1400,  # Increase the width to make plots wider
+        title_text=f"{product_id} - Forecasted vs Actual Percentage Change",
+        title_font=dict(size=24),
+        plot_bgcolor='#1E1E1E',
+        paper_bgcolor='#1E1E1E',
+        font=dict(color='white'),
+        margin=dict(l=40, r=40, t=80, b=40),
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        )
+    )
+    # Display the plotly chart in Streamlit
+    st.plotly_chart(fig)

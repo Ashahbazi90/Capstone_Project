@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
-from app_plots.streamlit_plts import generate_rolling_vol, generate_avg_pct_change_by_day_plot, comprehensive_crypto_analysis
+from app_plots.streamlit_plts import *
 
 
 # Assume df is your DataFrame loaded with the necessary data
@@ -68,10 +68,16 @@ def thirty_day_vol():
     st.title("30 Day Rolling Volatility")
     generate_rolling_vol()
 
+def forecasted_values():
+    st.title('7 Day Percent Change Forecast')
+    plot_forecasted_data()
+
+
 # Sidebar navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "About Metrics", "Crypto Analysis",
-                                  "30 Day Volatility", "Average Daily Percentage Change by Day of the Week"])
+                                  "30 Day Volatility", "Average Daily Percentage Change by Day of the Week",
+                                  "Forecasted Values"])
 
 # Page navigation logic
 if page == "Home":
@@ -84,4 +90,6 @@ elif page == '30 Day Volatility':
     generate_rolling_vol()
 elif page == 'Average Daily Percentage Change by Day of the Week':
     generate_avg_pct_change_by_day_plot()
+elif page == 'Forecasted Values':
+    forecasted_values()
 
