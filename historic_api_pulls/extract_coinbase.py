@@ -23,14 +23,14 @@ def historical_three_years():
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
     # start date is 3 years ago
     start = today - relativedelta(months = 36)
-    # end date is a week ago
+    # end date is a 2.5 years ago
     end = today - relativedelta(months=30)
     granularity = 86400 
 
     # set new master df where all teh data will be stored
     all_data = pd.DataFrame()
 
-    # loop over the product id list to extract 3months worth of data for teh above coins in one dataframe
+    # loop over the product id list to extract 6 months worth of data for the above coins in one dataframe
         ## set URL to perform get request
     for product_id in product_ids:
         url = f'https://api.pro.coinbase.com/products/{product_id}/candles'
@@ -82,14 +82,14 @@ def historical_two_half_years():
     # start date is 2.5 years plus 1 day to avoid overlap
     two_half = today - relativedelta(months=30)
     start =  two_half #+ timedelta(days=1)
-    # end date is a week ago
+    # end date is 2 years ago
     end = today - relativedelta(months=24)
     granularity = 86400 
 
     # set new master df where all teh data will be stored
     all_data = pd.DataFrame()
 
-    # loop over the product id list to extract 3months worth of data for teh above coins in one dataframe
+    # loop over the product id list to extract 6 months worth of data for teh above coins in one dataframe
     # for id in product_id:
         ## set URL to perform get request
     for product_id in product_ids:
@@ -138,17 +138,17 @@ def historical_two_years():
 
     ## set variable parameters for start, end and granulairty
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
-    # start date is 2.5 years plus 1 day to avoid overlap
+    # start date is 2 years 
     two_years = today - relativedelta(months=24)
     start =  two_years #+ timedelta(days=1)
-    # end date is a week ago
+    # end date is a a year an a half ago
     end = today - relativedelta(months=18)
     granularity = 86400 
 
     # set new master df where all teh data will be stored
     all_data = pd.DataFrame()
 
-    # loop over the product id list to extract 3months worth of data for teh above coins in one dataframe
+    # loop over the product id list to extract 6 months worth of data for teh above coins in one dataframe
     # for id in product_id:
         ## set URL to perform get request
     for product_id in product_ids:
@@ -197,10 +197,10 @@ def historical_one_half_years():
 
     ## set variable parameters for start, end and granulairty
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
-    # start date is 2.5 years plus 1 day to avoid overlap
+    # start date is 1.5 years 
     one_half = today - relativedelta(months=18)
     start =  one_half #+ timedelta(days=1)
-    # end date is a week ago
+    # end date is a a year ago
     end = today - relativedelta(months=12)
     granularity = 86400 
 
@@ -256,17 +256,17 @@ def historical_one_years():
 
     ## set variable parameters for start, end and granulairty
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
-    # start date is 2.5 years plus 1 day to avoid overlap
+    # start date is 1 year ago
     one_year = today - relativedelta(months=12)
     start =  one_year #+ timedelta(days=1)
-    # end date is a week ago
+    # end date is 6 months
     end = today - relativedelta(months=6)
     granularity = 86400 
 
     # set new master df where all teh data will be stored
     all_data = pd.DataFrame()
 
-    # loop over the product id list to extract 3months worth of data for teh above coins in one dataframe
+    # loop over the product id list to extract 6 months worth of data for teh above coins in one dataframe
         ## set URL to perform get request
     for product_id in product_ids:
         url = f'https://api.pro.coinbase.com/products/{product_id}/candles'
@@ -313,7 +313,7 @@ def historical_six_months():
 
     ## set variable parameters for start, end and granulairty
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
-    # start date is 2.5 years plus 1 day to avoid overlap
+    # start date is 6 months plus 
     one_year = today - relativedelta(months=6)
     start =  one_year #+ timedelta(days=1)
     # end date is a week ago
@@ -323,7 +323,7 @@ def historical_six_months():
     # set new master df where all teh data will be stored
     all_data = pd.DataFrame()
 
-    # loop over the product id list to extract 3months worth of data for teh above coins in one dataframe
+    # loop over the product id list to extract 6 months worth of data for teh above coins in one dataframe
         ## set URL to perform get request
     for product_id in product_ids:
         url = f'https://api.pro.coinbase.com/products/{product_id}/candles'
@@ -370,10 +370,10 @@ def previous_week():
 
     ## set variable parameters for start, end and granulairty
     product_ids = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ADA-USD', 'LINK-USD', 'AVAX-USD', 'LTC-USD', 'UNI-USD', 'COMP-USD', 'MATIC-USD'] ## turn this to a list to get more than BTC
-    # start date is 2.5 years plus 1 day to avoid overlap
+    # start date is a week ao
     one_week = today - relativedelta(days=7)
     start =  one_week #+ timedelta(days=1)
-    # end date is a week ago
+    # end date is a today
     end = today
     granularity = 86400 
 
@@ -461,6 +461,7 @@ def fetch_missing_dates(product_id, dates):
 
 
 def combine_price_data():
+    ### coombine all the funcitons in one to combine the data into one dataframe to work form 
     pst = pytz.timezone('US/Pacific')
     load_dt = datetime.now(pst).date().strftime('%Y-%m-%d')
     three_years = historical_three_years()
@@ -489,6 +490,8 @@ def combine_price_data():
     return combined_df
 
 def load_mysql_historic_table():
+
+    ## This function is used to create a database and a table for the training data to be loaded into 
     db = db_conn()
     try:
         crypto_data = combine_price_data()
