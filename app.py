@@ -5,22 +5,24 @@ from plotly.subplots import make_subplots
 from app_plots.streamlit_plts import *
 
 
-# Assume df is your DataFrame loaded with the necessary data
-# df = pd.read_csv('/Users/justinfarnan_hakkoda/capstone_project/Capstone_Project/Cleaned_Data/cleaned_crypto_updated_722.csv')
-# df.set_index('time', inplace=True)
-# df.index = pd.to_datetime(df.index)
 
 st.set_page_config(layout="wide")
 
 def home_page():
     st.title("Home Page")
-    st.write("Welcome to the Guardians of the Crypto App!")
+    st.markdown("## Welcome to the Guardians of the Crypto App!")
+    st.write("""
+             This application is designed to help traders and investors make smarter decisions in the cryptocurrency market. By using various visualizations and indicators, it provides insights into price trends and market movements.\n
+             Our application includes a range of tools and charts that analyze historical price data to forecast future price changes. These features are integrated into a user-friendly interface, making it easy for users to access predictive price forecasts and analyze market trends.\n
+             One of the highlights of our application is a chart on the last page that compares forecasted values to actual values, based on a predictive model we developed. This chart helps users see how well our model performs and understand the potential accuracy of the predictions.\n
+             Whether you're new to crypto trading or a seasoned investor, this comprehensive tool is here to help you make more informed trading decisions and minimize financial risks. If the model's predictions hold true, you'll have a reliable resource for anticipating market movements. If not, you'll gain valuable insights into the limitations of current analytical techniques, guiding you toward exploring alternative approaches.
+             """)
 
 def about_metrics():
     st.title("Explaning Trading Metrics")
     select_metric = st.selectbox('Select Metrc',['Percentage Change', 'Volume', 'RSI', 'MACD', 'Momentum', 'Volatility'])
     if select_metric == 'Percentage Change':
-        st.markdown("## Percentage Change")
+        st.markdown("markdown Percentage Change")
         st.markdown('### What it is')
         st.write('This metrics shows how much the price has changed over a given period.')
         st.markdown('### How to interpret it')
