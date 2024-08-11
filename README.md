@@ -2,7 +2,9 @@
 
 ### Objective
 
-The "Guardians of the Crypto" project aims to develop a user-friendly application for predicting cryptocurrency price changes using historical data. By building a predictive model, the application provides traders and investors with forecasts to improve decision-making accuracy and reduce financial risks. The project explores the effectiveness of these predictive tools to guide better investment strategies and highlights the limitations of current analytical techniques.
+The “Guardians of the Crypto” project aims to develop a user-friendly application for predicting cryptocurrency price changes using historical data. By building a predictive model, the application provides traders and investors with forecasts to improve decision-making accuracy and reduce financial risks. The project explores the effectiveness of these predictive tools to guide better investment strategies and highlights the limitations of current analytical techniques.
+
+For more detailed information, please refer to the [White Paper](https://github.com/Ashahbazi90/Capstone_Project/blob/main/main_ds_notebooks/WHITEPAPER.md).
 
 ### Data Extraction
 
